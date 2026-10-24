@@ -53,6 +53,13 @@ document.querySelectorAll('[data-service]').forEach(link => {
     clearResult();
   });
 });
+document.querySelectorAll('[data-discount]').forEach(link => {
+  link.addEventListener('click', () => {
+    if (sending) return;
+    form.elements.discount.value = link.dataset.discount;
+    clearResult();
+  });
+});
 function showResult(state, title, message) {
   result.dataset.state = state;
   statusTitle.textContent = title;
@@ -69,7 +76,7 @@ form.addEventListener('submit', async event => {
   if (value('_honey')) return;
   const subject = `Website service request: ${value('service')}`;
   data.set('_subject', subject);
-  const body = ['Hello Hawks AC Service,', '', `Service: ${value('service')}`, `Name: ${value('name')}`, `Phone: ${value('phone')}`, `Email: ${value('email')}`, `City / ZIP: ${value('city')}`, '', 'Details:', value('message') || 'Please contact me to discuss the details.'].join('\n');
+  const body = ['Hello Hawks AC Service,', '', `Service: ${value('service')}`, `Name: ${value('name')}`, `Phone: ${value('phone')}`, `Email: ${value('email')}`, `City / ZIP: ${value('city')}`, `Discount: ${value('discount') || 'None selected'}`, '', 'Details:', value('message') || 'Please contact me to discuss the details.'].join('\n');
   draftLink.href = `mailto:hawksacservice@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const controls = [...form.querySelectorAll('input,select,textarea,button')];
   controls.forEach(control => control.disabled = true);
