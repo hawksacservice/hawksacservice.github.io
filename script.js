@@ -15,6 +15,12 @@ menuButton.addEventListener('click', () => {
   navigation.classList.toggle('is-open', open);
 });
 navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+document.addEventListener('click', event => {
+  if (navigation.classList.contains('is-open') && !event.target.closest('.site-header')) closeMenu();
+});
+document.addEventListener('focusin', event => {
+  if (navigation.classList.contains('is-open') && !event.target.closest('.site-header')) closeMenu();
+});
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && navigation.classList.contains('is-open')) {
     closeMenu();
