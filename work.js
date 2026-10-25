@@ -1,14 +1,22 @@
 'use strict';
 const galleryLinks = [...document.querySelectorAll('[data-photo]')];
 const moreWork = document.querySelector('#more-work');
-const extraWork = [...document.querySelectorAll('.work-card-extra')];
-extraWork.forEach(card => card.hidden = true);
-moreWork.hidden = false;
+const galleryCards = [...document.querySelectorAll('#work-grid .work-card')];
+const mobileGallery = window.matchMedia('(max-width: 680px)');
+function updateGalleryVisibility() {
+  const expanded = moreWork.getAttribute('aria-expanded') === 'true';
+  const collapsedCount = mobileGallery.matches ? 4 : 6;
+  galleryCards.forEach((card, index) => card.hidden = !expanded && index >= collapsedCount);
+  moreWork.hidden = galleryCards.length <= collapsedCount;
+  moreWork.innerHTML = expanded ? 'View less <span aria-hidden="true">−</span>' : 'View more <span aria-hidden="true">+</span>';
+}
+updateGalleryVisibility();
+mobileGallery.addEventListener('change', updateGalleryVisibility);
 moreWork.addEventListener('click', () => {
   const expanded = moreWork.getAttribute('aria-expanded') !== 'true';
-  extraWork.forEach(card => card.hidden = !expanded);
   moreWork.setAttribute('aria-expanded', String(expanded));
-  moreWork.innerHTML = expanded ? 'Show fewer photos <span aria-hidden="true">−</span>' : 'View more work <span aria-hidden="true">+</span>';
+  updateGalleryVisibility();
+  if (!expanded) moreWork.scrollIntoView({block: 'nearest'});
 });
 const photoDialog = document.querySelector('.work-lightbox');
 const fullPhoto = document.querySelector('#work-full-image');
